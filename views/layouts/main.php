@@ -55,8 +55,7 @@ AppAsset::register($this);
 //            )
         ],
     ]);?>
-    <?NavBar::end();
-    ?>
+    <?NavBar::end();?>
 
     <div class="container">
         <?= Breadcrumbs::widget([
@@ -64,6 +63,9 @@ AppAsset::register($this);
         ]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
+    </div>
+    <div class="container">
+        <a href="<?=Yii::$app->session->get(\app\helpers\Service::getLastPageSessionKey())?>">Вернуться назад</a>
     </div>
 </div>
 
