@@ -8,16 +8,16 @@
 
 ?>
 <div class="row">
-    <?if(!empty($arErrors)):?>
+    <?php if(!empty($arErrors)):?>
         <div class="col-md-12">
-            <?foreach($arErrors as $error):?>
+            <?php foreach($arErrors as $error):?>
                 <div class="alert alert-danger"><?=$error?></div>
-            <?endforeach;?>
+            <?php endforeach;?>
         </div>
-    <?endif;?>
+    <?php endif;?>
     <div class="col-md-12">
         <h3>Добавление события.</h3>
-        <?$form = \yii\bootstrap\ActiveForm::begin(array());?>
+        <?php $form = \yii\bootstrap\ActiveForm::begin(array());?>
         <div class="row">
             <div class="col-md-12">
                 <?=$form->field($activity, $activity->getTitleAttribute())?>
@@ -48,6 +48,6 @@
                 </div>
             </div>
         </div>
-        <?$form::end();?>
+        <?php $form::end();?>
     </div>
 </div>

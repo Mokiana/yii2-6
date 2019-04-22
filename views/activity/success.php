@@ -22,12 +22,12 @@
                 <th>Начало события</th>
                 <td><?=$activity->getDateActivity($activity->getAttributes()[$activity->getStartDateAttribute()])?></td>
             </tr>
-            <?if($activity->getAttributes()[$activity->getEndDateAttribute()]):?>
+            <?php if($activity->getAttributes()[$activity->getEndDateAttribute()]):?>
                 <tr>
                     <th>Начало события</th>
                     <td><?=$activity->getDateActivity($activity->getAttributes()[$activity->getEndDateAttribute()])?></td>
                 </tr>
-            <?endif;?>
+            <?php endif;?>
             <tr>
                 <th>Событие занимает весь день</th>
                 <td><?=$activity->getAttributes()[$activity->getIsBlockingAttribute()] ? 'Да' : 'Нет'?></td>

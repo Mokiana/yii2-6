@@ -55,7 +55,7 @@ AppAsset::register($this);
 //            )
         ],
     ]);?>
-    <?NavBar::end();?>
+    <?php NavBar::end();?>
 
     <div class="container">
         <?= Breadcrumbs::widget([

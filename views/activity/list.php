@@ -7,15 +7,15 @@
 ?>
 <table class="table">
     <tr>
-        <?foreach ($arColumns as $code => $title):?>
+        <?php foreach ($arColumns as $code => $title):?>
             <th><?=$title?></th>
-        <?endforeach;?>
+        <?php endforeach;?>
     </tr>
-    <?foreach ($arRows as $arRow):?>
+    <?php foreach ($arRows as $arRow):?>
         <tr>
-            <?foreach ($arColumns as $code => $title):?>
+            <?php foreach ($arColumns as $code => $title):?>
                 <td><?=$arRow[$code]?></td>
-            <?endforeach;?>
+            <?php endforeach;?>
         </tr>
-    <?endforeach;?>
+    <?php endforeach;?>
 </table>
