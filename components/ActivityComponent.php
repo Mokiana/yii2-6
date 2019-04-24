@@ -3,9 +3,11 @@
 namespace app\components;
 
 
+use app\base\components\FileComponent;
 use app\base\models\ActivityModel;
 use app\helpers\ActivityStorage;
 use app\models\Activity;
+use function foo\func;
 use yii\base\Component;
 use yii\base\Exception;
 
@@ -18,8 +20,9 @@ class ActivityComponent extends Component
     {
         parent::init();
 
-        if(empty($this->activity_class))
+        if(empty($this->activity_class)) {
             throw new Exception('Нужно передать activity_class');
+        }
     }
 
     /**
@@ -32,12 +35,16 @@ class ActivityComponent extends Component
 
     /**
      * @param Activity $model
+     * @param FileComponent|ActivityFileComponent $fileComponent
      * @return bool
+     * @throws Exception
      */
-    public function createActivity(Activity &$model):bool
+    public function createActivity(Activity &$model, $fileComponent):bool
     {
         $isValid = $model->validate();
         if($isValid){
+            $fileAttribute = $model->getUploadedFileAttribute();
+            $fileComponent->saveFiles($model, $fileAttribute);
             $obActivityStorage = new ActivityStorage($model);
             $res = $obActivityStorage->addItem($model->getAttributes());
             if(!$res) {
@@ -52,7 +59,15 @@ class ActivityComponent extends Component
     public function getColumns()
     {
         $model = $this->getModel();
-        return $model->attributeLabels();
+        $includedInListColumns = array(
+            'id' => 'ID события',
+            $model->getTitleAttribute() => $model->getAttributeLabel($model->getTitleAttribute()),
+            $model->getStartDateAttribute() => $model->getAttributeLabel($model->getStartDateAttribute()),
+            $model->getEndDateAttribute() => $model->getAttributeLabel($model->getEndDateAttribute()),
+            $model->getIsBlockingAttribute() => $model->getAttributeLabel($model->getIsBlockingAttribute()),
+        );
+
+        return $includedInListColumns;
     }
 
     public function getAllActivities()
@@ -69,5 +84,17 @@ class ActivityComponent extends Component
             $arData[$key][$endDateCode] = $model->getDateActivity($arDatum[$endDateCode], "&mdash;");
         }
         return $arData;
+    }
+
+    public function getActivityById($id)
+    {
+        $arActivities = array_values(array_filter($this->getAllActivities(), function($arItem) use ($id) {
+            if((int)$arItem['id'] === (int)$id) {
+                return true;
+            }
+            return false;
+        }));
+        list($arActivity) = $arActivities;
+        return $arActivity;
     }
 }

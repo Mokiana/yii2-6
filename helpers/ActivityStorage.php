@@ -112,6 +112,19 @@ class ActivityStorage extends Storage
            return $startFirst > $startSecond;
         });
 
-        return $arAllActivities;
+        return array_map(function($arItem){
+            /**
+             * @var $model Activity
+             */
+            $model = $this->getModel();
+            $arFiles = $arItem[$model->getUploadedFileAttribute()];
+            if(!is_array($arFiles))
+                return $arItem;
+            foreach ($arFiles as &$file) {
+                $file = str_replace(\Yii::getAlias('@webroot'), '', $file);
+            }
+            $arItem[$model->getUploadedFileAttribute()] = $arFiles;
+            return $arItem;
+        }, $arAllActivities);
     }
 }

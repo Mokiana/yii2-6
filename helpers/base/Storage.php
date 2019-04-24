@@ -161,6 +161,7 @@ class Storage
      * @param string $param
      * @param $value
      * @return array
+     * @throws Exception
      */
     public function getOneByParam(string $param, $value):array
     {

@@ -52,6 +52,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'activity/detail/<id:\d+>' => 'activity/detail'
             ],
         ],
     ],

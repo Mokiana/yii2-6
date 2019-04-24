@@ -3,15 +3,20 @@
 namespace app\base\models;
 
 
+use app\base\models\interfaces\StartFinishModelInterface;
+use app\base\validators\AfterDateValidator;
 use yii\base\Model;
 
-class ActivityModel extends Model
+class ActivityModel extends Model implements StartFinishModelInterface
 {
     public $title;
     public $description;
     public $startDate;
     public $endDate;
-    public $is_blocking;
+    public $email;
+    public $isBlocking;
+    public $needNotification;
+    public $uploadedFile;
 
 
     public function getTitleAttribute()
@@ -34,9 +39,39 @@ class ActivityModel extends Model
         return 'endDate';
     }
 
+    public function getNeedNotificationAttribute()
+    {
+        return 'needNotification';
+    }
+    public function getEmailAttribute()
+    {
+        return 'email';
+    }
+
     public function getIsBlockingAttribute()
     {
-        return 'is_blocking';
+        return 'isBlocking';
+    }
+
+    public function getUploadedFileAttribute()
+    {
+        return 'uploadedFile';
+    }
+
+    public function getUploadedFileMultiAttribute()
+    {
+        return $this->getUploadedFileAttribute() . '[]';
+    }
+
+
+    public function getStartDate()
+    {
+        return $this->getStartDateAttribute();
+    }
+
+    public function getFinishDate()
+    {
+        return $this->getEndDateAttribute();
     }
 
     public function createTimeStamp($value)
@@ -67,6 +102,9 @@ class ActivityModel extends Model
             $this->getStartDateAttribute() => 'Дата начала',
             $this->getEndDateAttribute() => 'Дата завершения',
             $this->getIsBlockingAttribute() => 'Блокирует день',
+            $this->getEmailAttribute() => 'Email',
+            $this->getNeedNotificationAttribute() => 'Присылать оповещения',
+            $this->getUploadedFileAttribute() => 'Картинка события',
         );
     }
 
@@ -84,7 +122,7 @@ class ActivityModel extends Model
 
             ),
             array(
-                $this->getIsBlockingAttribute(),
+                array($this->getIsBlockingAttribute(), $this->getNeedNotificationAttribute()),
                 'boolean',
             ),
             array(
@@ -98,6 +136,33 @@ class ActivityModel extends Model
                 'format' => 'yyyy-MM-dd',
                 'min' => date('Y-m-d',time()),
                 'tooSmall' => '"{attribute}" не может быть ранее сегодняшнего дня',
+            ),
+            array(
+                array($this->getStartDateAttribute(), $this->getEndDateAttribute()),
+                AfterDateValidator::class
+            ),
+            array(
+                array($this->getEmailAttribute()),
+                'email'
+            ),
+            array(
+                array($this->getEmailAttribute()),
+                'required',
+                'when' => function($model, $attribute){
+                    /**
+                     * @var $model ActivityModel
+                     */
+                    $checkingAttribute = $model->getNeedNotificationAttribute();
+                    return $model->$checkingAttribute == true;
+                },
+                'message' => 'Если Вы хотите получать оповещения, необходимо заполнить поле "{attribute}"'
+            ),
+            array(
+                $this->getUploadedFileAttribute(),
+                'file',
+                'extensions' => array('jpeg', 'jpg', 'gif', 'png'),
+                'maxSize' => 15 * 1024 * 1024,
+                'maxFiles' => 2
             ),
         );
     }
