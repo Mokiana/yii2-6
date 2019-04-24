@@ -6,14 +6,21 @@ namespace app\components;
 use app\base\components\FileComponent;
 use app\base\models\ActivityModel;
 use app\helpers\ActivityStorage;
+use app\helpers\base\Storage;
 use app\models\Activity;
 use function foo\func;
 use yii\base\Component;
 use yii\base\Exception;
 
+/**
+ * Class ActivityComponent
+ * @package app\components
+ */
 class ActivityComponent extends Component
 {
     public $activity_class;
+    public $storage_class;
+
     public $errors = array();
 
     public function init()
@@ -45,7 +52,10 @@ class ActivityComponent extends Component
         if($isValid){
             $fileAttribute = $model->getUploadedFileAttribute();
             $fileComponent->saveFiles($model, $fileAttribute);
-            $obActivityStorage = new ActivityStorage($model);
+            /**
+             * @var $obActivityStorage Storage
+             */
+            $obActivityStorage = new $this->storage_class($model);
             $res = $obActivityStorage->addItem($model->getAttributes());
             if(!$res) {
                 $this->errors = array_merge($this->errors, $obActivityStorage->getErrors());

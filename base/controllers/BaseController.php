@@ -10,7 +10,8 @@ class BaseController extends Controller
 {
     public function afterAction($action, $result)
     {
-        \Yii::$app->session->set(Service::getLastPageSessionKey(), \Yii::$app->request->url);
+        if(strpos(\Yii::$app->request->url, '/asset') !== 0)
+            \Yii::$app->session->set(Service::getLastPageSessionKey(), \Yii::$app->request->url);
         return parent::afterAction($action, $result);
     }
 }
