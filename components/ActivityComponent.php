@@ -53,15 +53,16 @@ class ActivityComponent extends Component
             $fileAttribute = $model->getUploadedFileAttribute();
             $fileComponent->saveFiles($model, $fileAttribute);
             /**
-             * @var $obActivityStorage Storage
+             * @var $obActivityDao \app\components\ActivityDaoComponent
              */
-            $obActivityStorage = new $this->storage_class($model);
-            $res = $obActivityStorage->addItem($model->getAttributes());
-            if(!$res) {
-                $this->errors = array_merge($this->errors, $obActivityStorage->getErrors());
-            }
-            return $res;
-
+            $obActivityDao = \Yii::createObject(array(
+                'class' => ActivityDaoComponent::class,
+                'connection' => \Yii::$app->getDb()
+            ));
+            $arData = $model->getAttributes();
+            $arData['user_id'] = 1;
+            $obActivityDao->addNewItem($arData);
+            return true;
         }
         return $isValid;
     }
@@ -83,8 +84,16 @@ class ActivityComponent extends Component
     public function getAllActivities()
     {
         $model = $this->getModel();
-        $obStorage = new ActivityStorage($model);
-        $arData = $obStorage->getAllFromStorage();
+        /**
+         * @var $obActivityDao \app\components\ActivityDaoComponent
+         */
+        $obActivityDao = \Yii::createObject(array(
+            'class' => ActivityDaoComponent::class,
+            'connection' => \Yii::$app->getDb()
+        ));
+
+        $arData = $obActivityDao->getAllData();
+
         $isBlockingCode = $model->getIsBlockingAttribute();
         $startDateCode = $model->getStartDateAttribute();
         $endDateCode = $model->getEndDateAttribute();
@@ -98,13 +107,25 @@ class ActivityComponent extends Component
 
     public function getActivityById($id)
     {
-        $arActivities = array_values(array_filter($this->getAllActivities(), function($arItem) use ($id) {
-            if((int)$arItem['id'] === (int)$id) {
-                return true;
+        /**
+         * @var $obActivityDao \app\components\ActivityDaoComponent
+         */
+        $obActivityDao = \Yii::createObject(array(
+            'class' => ActivityDaoComponent::class,
+            'connection' => \Yii::$app->getDb()
+        ));
+        $arActivity = $obActivityDao->getAllByParam('id', $id);
+        $arFiles = array();
+        foreach ($arActivity as $arAct) {
+            if($arAct['file_path']) {
+                $arFiles[] = $arAct['file_path'];
             }
-            return false;
-        }));
-        list($arActivity) = $arActivities;
+        }
+        list($arActivity) = $arActivity;
+        if(!empty($arFiles)) {
+            $arActivity[$this->getModel()->getUploadedFileAttribute()] = $arFiles;
+        }
+
         return $arActivity;
     }
 }
