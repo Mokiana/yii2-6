@@ -30,10 +30,44 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <?=$form->field($activity, $activity->getStartDateAttribute())->input('date')?>
+                <?=$form->field($activity,
+                    $activity->getStartDateAttribute(),
+                    array(
+                        'enableClientValidation' => false,
+                        'enableAjaxValidation' => true
+                    )
+                )->input('date')?>
             </div>
             <div class="col-md-6">
-                <?=$form->field($activity, $activity->getEndDateAttribute())->input('date')?>
+                <?=$form->field(
+                    $activity,
+                    $activity->getEndDateAttribute(),
+                    array('enableClientValidation' => false,
+                        'enableAjaxValidation' => true
+                    )
+                    )->input('date')?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <?=$form->field($activity, $activity->getUploadedFileMultiAttribute())->fileInput(array('multiple' => true))?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <?=$form->field(
+                        $activity,
+                        $activity->getEmailAttribute(),
+                        array(
+                            'enableClientValidation' => false,
+                            'enableAjaxValidation' => true
+                        )
+                )->textInput() ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <?=$form->field($activity, $activity->getNeedNotificationAttribute())->checkbox()?>
             </div>
         </div>
         <div class="row">

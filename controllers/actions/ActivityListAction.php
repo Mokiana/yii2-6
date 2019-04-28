@@ -4,15 +4,16 @@ namespace app\controllers\actions;
 
 
 use app\components\ActivityComponent;
-use app\helpers\ComponentManager;
 use app\models\Activity;
 use yii\base\Action;
 
 class ActivityListAction extends Action
 {
+    public $name;
+
     public function run()
     {
-        $activityComponent = ComponentManager::getActivityComponent();
+        $activityComponent = \Yii::$app->get($this->name);
         if(!$activityComponent) {
             /**
              * @var $activityComponent ActivityComponent
@@ -22,12 +23,19 @@ class ActivityListAction extends Action
                 'activity_class' => Activity::class
             ));
         }
+        $model = $activityComponent->getModel();
 
         return $this->controller->render(
             'list',
             array(
                 'arColumns' => $activityComponent->getColumns(),
-                'arRows' => $activityComponent->getAllActivities()
+                'arRows' => $activityComponent->getAllActivities(),
+                'arLinkFields' => array(
+                    $model->getTitleAttribute(),
+                    'id',
+                ),
+                'linkTemplate' => '@web/activity/detail',
+                'param' => 'id'
             )
         );
     }

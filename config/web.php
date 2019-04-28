@@ -15,7 +15,8 @@ $config = [
     'components' => [
         'activity' => array(
             'class' => \app\components\ActivityComponent::class,
-            'activity_class' => \app\models\Activity::class
+            'activity_class' => \app\models\Activity::class,
+            'storage_class' => \app\helpers\ActivityStorage::class
         ),
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -52,6 +53,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'activity/detail/<id:\d+>' => 'activity/detail'
             ],
         ],
     ],
