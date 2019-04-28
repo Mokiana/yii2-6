@@ -74,12 +74,6 @@ class Activity extends Model implements StartFinishModelInterface
         return $this->getEndDateAttribute();
     }
 
-    public function createTimeStamp($value)
-    {
-        if(is_string($value))
-            return \DateTime::createFromFormat('Y-m-d', $value)->getTimestamp();
-        return "";
-    }
 
     public function getDateActivity($value, $emptyResult = "")
     {
@@ -150,7 +144,7 @@ class Activity extends Model implements StartFinishModelInterface
                 'required',
                 'when' => function($model, $attribute){
                     /**
-                     * @var $model ActivityModel
+                     * @var $model Activity
                      */
                     $checkingAttribute = $model->getNeedNotificationAttribute();
                     return $model->$checkingAttribute == true;

@@ -4,11 +4,8 @@ namespace app\components;
 
 
 use app\base\components\FileComponent;
-use app\base\models\ActivityModel;
-use app\helpers\ActivityStorage;
-use app\helpers\base\Storage;
+use app\helpers\Date;
 use app\models\Activity;
-use function foo\func;
 use yii\base\Component;
 use yii\base\Exception;
 
@@ -99,8 +96,8 @@ class ActivityComponent extends Component
         $endDateCode = $model->getEndDateAttribute();
         foreach ($arData as $key => $arDatum) {
             $arData[$key][$isBlockingCode] = $arDatum[$isBlockingCode] == true ? 'Да' : "Нет";
-            $arData[$key][$startDateCode] = $model->getDateActivity($arDatum[$startDateCode], "&mdash;");
-            $arData[$key][$endDateCode] = $model->getDateActivity($arDatum[$endDateCode], "&mdash;");
+            $arData[$key][$startDateCode] = Date::convertFromFormatToString($arDatum[$startDateCode], "&mdash;");
+            $arData[$key][$endDateCode] = Date::convertFromFormatToString($arDatum[$endDateCode], "&mdash;");
         }
         return $arData;
     }
