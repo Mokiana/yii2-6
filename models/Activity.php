@@ -24,6 +24,11 @@ class Activity extends Model implements StartFinishModelInterface
         return 'title';
     }
 
+    public function getUserAttribute()
+    {
+        return 'user_id';
+    }
+
     public function getDescriptionAttribute()
     {
         return 'description';
@@ -92,6 +97,7 @@ class Activity extends Model implements StartFinishModelInterface
     {
         return array(
             $this->getTitleAttribute() => 'Название события',
+            $this->getUserAttribute() => 'Id пользователя',
             $this->getDescriptionAttribute() => 'Описание события',
             $this->getStartDateAttribute() => 'Дата начала',
             $this->getEndDateAttribute() => 'Дата завершения',
@@ -106,7 +112,12 @@ class Activity extends Model implements StartFinishModelInterface
     {
         return array(
             array(
-                array($this->getTitleAttribute(), $this->getDescriptionAttribute(), $this->getStartDateAttribute()),
+                array(
+                    $this->getTitleAttribute(),
+                    $this->getDescriptionAttribute(),
+                    $this->getStartDateAttribute(),
+                    $this->getUserAttribute()
+                ),
                 'required',
             ),
             array(

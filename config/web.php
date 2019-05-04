@@ -57,8 +57,13 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'activity/detail/<id:\d+>' => 'activity/detail'
+                'activity/detail/<id:\d+>' => 'activity/detail',
             ],
+        ],
+    ],
+    'modules' => [
+        'auth' => [
+            'class' => app\modules\auth\AuthModule::class,
         ],
     ],
     'params' => $params,
