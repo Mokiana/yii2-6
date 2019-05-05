@@ -6,6 +6,7 @@ namespace app\components;
 use app\base\components\FileComponent;
 use app\helpers\Date;
 use app\models\Activity;
+use app\models\ActivityFiles;
 use yii\base\Component;
 use yii\base\Exception;
 
@@ -47,18 +48,24 @@ class ActivityComponent extends Component
     {
         $isValid = $model->validate();
         if($isValid){
-            $fileAttribute = $model->getUploadedFileAttribute();
-            $fileComponent->saveFiles($model, $fileAttribute);
-            /**
-             * @var $obActivityDao \app\components\ActivityDaoComponent
-             */
-            $obActivityDao = \Yii::createObject(array(
-                'class' => ActivityDaoComponent::class,
-                'connection' => \Yii::$app->getDb()
-            ));
-            $arData = $model->getAttributes();
-            $arData['user_id'] = 1;
-            $obActivityDao->addNewItem($arData);
+            $fileComponent->saveFiles($model, 'uploadedFile');
+
+            $model->save();
+
+            foreach ($model->uploadedFile as $file) {
+                $fileModel = \Yii::createObject(
+                    array(
+                        'class' => ActivityFiles::class,
+                        'activity_id' => $model->id,
+                        'file_path' => $file
+                    )
+                );
+                $isValidFile = $fileModel->validate();
+                if($isValidFile) {
+                    $fileModel->save();
+                }
+            }
+
             return true;
         }
         return $isValid;
@@ -69,10 +76,10 @@ class ActivityComponent extends Component
         $model = $this->getModel();
         $includedInListColumns = array(
             'id' => 'ID события',
-            $model->getTitleAttribute() => $model->getAttributeLabel($model->getTitleAttribute()),
-            $model->getStartDateAttribute() => $model->getAttributeLabel($model->getStartDateAttribute()),
-            $model->getEndDateAttribute() => $model->getAttributeLabel($model->getEndDateAttribute()),
-            $model->getIsBlockingAttribute() => $model->getAttributeLabel($model->getIsBlockingAttribute()),
+            'title' => $model->getAttributeLabel('title'),
+            'startDate' => $model->getAttributeLabel('startDate'),
+            'endDate' => $model->getAttributeLabel('endDate'),
+            'isBlocking' => $model->getAttributeLabel('isBlocking'),
         );
 
         return $includedInListColumns;
@@ -81,19 +88,11 @@ class ActivityComponent extends Component
     public function getAllActivities()
     {
         $model = $this->getModel();
-        /**
-         * @var $obActivityDao \app\components\ActivityDaoComponent
-         */
-        $obActivityDao = \Yii::createObject(array(
-            'class' => ActivityDaoComponent::class,
-            'connection' => \Yii::$app->getDb()
-        ));
+        $arData = $model::find()->asArray()->all();
 
-        $arData = $obActivityDao->getAllData();
-
-        $isBlockingCode = $model->getIsBlockingAttribute();
-        $startDateCode = $model->getStartDateAttribute();
-        $endDateCode = $model->getEndDateAttribute();
+        $isBlockingCode = 'isBlocking';
+        $startDateCode = 'startDate';
+        $endDateCode = 'endDate';
         foreach ($arData as $key => $arDatum) {
             $arData[$key][$isBlockingCode] = $arDatum[$isBlockingCode] == true ? 'Да' : "Нет";
             $arData[$key][$startDateCode] = Date::convertFromFormatToString($arDatum[$startDateCode], "&mdash;");
@@ -104,23 +103,19 @@ class ActivityComponent extends Component
 
     public function getActivityById($id)
     {
-        /**
-         * @var $obActivityDao \app\components\ActivityDaoComponent
-         */
-        $obActivityDao = \Yii::createObject(array(
-            'class' => ActivityDaoComponent::class,
-            'connection' => \Yii::$app->getDb()
-        ));
-        $arActivity = $obActivityDao->getAllByParam('id', $id);
-        $arFiles = array();
-        foreach ($arActivity as $arAct) {
-            if($arAct['file_path']) {
-                $arFiles[] = $arAct['file_path'];
-            }
-        }
-        list($arActivity) = $arActivity;
-        if(!empty($arFiles)) {
-            $arActivity[$this->getModel()->getUploadedFileAttribute()] = $arFiles;
+        $model = $this->getModel();
+        $model = $model::find()
+            ->select(array(
+                '*',
+            ))
+            ->where(['id' => $id])
+            ->one();
+
+        $files = $model->getActivityFiles()->asArray()->all();
+        $arActivity = $model->getAttributes();
+
+        foreach ($files as $file) {
+            $arActivity['uploadedFile'][] = $file['file_path'];
         }
 
         return $arActivity;

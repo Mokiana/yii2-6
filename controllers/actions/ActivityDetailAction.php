@@ -29,14 +29,14 @@ class ActivityDetailAction extends Action
         return $this->controller->render(
             'detail',
             array(
-                'title' => $arActivity[$model->getTitleAttribute()],
-                'dateFrom' => $arActivity[$model->getStartDateAttribute()],
-                'dateTo' => $arActivity[$model->getEndDateAttribute()],
-                'pictures' => $arActivity[$model->getUploadedFileAttribute()],
-                'description' => $arActivity[$model->getDescriptionAttribute()],
-                'isBlocking' => $arActivity[$model->getIsBlockingAttribute()],
-                'useNotifications' => $arActivity[$model->getNeedNotificationAttribute()],
-                'email' => $arActivity[$model->getEmailAttribute()],
+                'title' => $arActivity['title'],
+                'dateFrom' => $arActivity['dateFrom'],
+                'dateTo' => $arActivity['dateTo'],
+                'pictures' => $arActivity['uploadedFile'],
+                'description' => $arActivity['description'],
+                'isBlocking' => $arActivity['isBlocking'],
+                'useNotifications' => $arActivity['needNotification'],
+                'email' => $arActivity['email'],
             )
         );
     }

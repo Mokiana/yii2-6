@@ -10,13 +10,14 @@ namespace app\modules\auth\components;
 
 
 use app\models\Users;
+use app\modules\auth\models\UsersSignIn;
 use yii\base\Component;
 use yii\web\Application;
 
-class CreateUserComponent extends Component
+class AuthComponent extends Component
 {
     /**
-     * @var Users
+     * @var Users|UsersSignIn
      */
     public $model;
     /**
@@ -26,7 +27,7 @@ class CreateUserComponent extends Component
 
 
     /**
-     * @return Users
+     * @return Users|UsersSignIn
      */
     public function getModel()
     {
@@ -47,6 +48,33 @@ class CreateUserComponent extends Component
         return false;
     }
 
+    /**
+     * @param $model UsersSignIn
+     * @return bool
+     */
+    public function authUser(&$model): bool {
+        if($model->validate(array('email', 'password'))) {
+            $userModel =  UsersSignIn::find()
+                ->where(array('email' => $model->email))
+                ->one();
+            $passwordIsCorrect = $this->checkPassword($model->password, $userModel->password_hash);
+            if($passwordIsCorrect) {
+                return $this->app->user->login($userModel, 3600);
+            }
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * @param $password
+     * @param $hash
+     * @return boolean
+     */
+    private function checkPassword($password, $hash)
+    {
+        return $this->app->security->validatePassword($password, $hash);
+    }
 
     private function generateAuthKey(){
         return $this->app->security->generateRandomString();

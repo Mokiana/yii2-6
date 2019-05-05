@@ -36,6 +36,7 @@ class ActivityCreateAction extends Action
                 return ActiveForm::validate($model);
             }
 
+            $model->user_id = \Yii::$app->getUser()->getId();
             $res = $activityComponent->createActivity($model, $fileComponent);
             if ($res) {
                 return $this->controller->render('success', array('activity' => $model));

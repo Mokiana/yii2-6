@@ -1,7 +1,7 @@
 <?php
 /**
  * @var $this  \yii\web\View
- * @var $activity \app\base\models\ActivityModel
+ * @var $activity \app\models\Activity
  * @var $strUser string
  * @var $arErrors
  */
@@ -20,18 +20,18 @@
         <?php $form = \yii\bootstrap\ActiveForm::begin(array());?>
         <div class="row">
             <div class="col-md-12">
-                <?=$form->field($activity, $activity->getTitleAttribute())?>
+                <?=$form->field($activity, 'title')?>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <?=$form->field($activity, $activity->getDescriptionAttribute())->textarea()?>
+                <?=$form->field($activity, 'description')->textarea()?>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
                 <?=$form->field($activity,
-                    $activity->getStartDateAttribute(),
+                    'startDate',
                     array(
                         'enableClientValidation' => false,
                         'enableAjaxValidation' => true
@@ -41,7 +41,7 @@
             <div class="col-md-6">
                 <?=$form->field(
                     $activity,
-                    $activity->getEndDateAttribute(),
+                    'endDate',
                     array('enableClientValidation' => false,
                         'enableAjaxValidation' => true
                     )
@@ -50,14 +50,14 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <?=$form->field($activity, $activity->getUploadedFileMultiAttribute())->fileInput(array('multiple' => true))?>
+                <?=$form->field($activity, 'uploadedFile')->fileInput(array('multiple' => true))?>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
                 <?=$form->field(
                         $activity,
-                        $activity->getEmailAttribute(),
+                        'email',
                         array(
                             'enableClientValidation' => false,
                             'enableAjaxValidation' => true
@@ -67,12 +67,12 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <?=$form->field($activity, $activity->getNeedNotificationAttribute())->checkbox()?>
+                <?=$form->field($activity, 'needNotification')->checkbox()?>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <?=$form->field($activity, $activity->getIsBlockingAttribute())->checkbox()?>
+                <?=$form->field($activity, 'isBlocking')->checkbox()?>
             </div>
         </div>
         <div class="row">

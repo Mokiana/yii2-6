@@ -36,7 +36,6 @@ class UsersBase extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 150],
             [['email'], 'string', 'max' => 200],
             [['password_hash', 'token', 'auth_key'], 'string', 'max' => 300],
-            [['email'], 'unique'],
         ];
     }
 
@@ -54,5 +53,9 @@ class UsersBase extends \yii\db\ActiveRecord
             'auth_key' => Yii::t('app', 'Auth Key'),
             'date_created' => Yii::t('app', 'Date Created'),
         ];
+    }
+
+    public function getUsername() {
+        return $this->name ? $this->name : $this->email;
     }
 }

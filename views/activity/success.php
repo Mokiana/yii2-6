@@ -13,25 +13,25 @@ use app\helpers\Date; ?>
         <table class="table stripped">
             <tr>
                 <th>Название</th>
-                <td><?=$activity->getAttributes()[$activity->getTitleAttribute()]?></td>
+                <td><?=$activity->title?></td>
             </tr>
             <tr>
                 <th>Описание</th>
-                <td><?=$activity->getAttributes()[$activity->getDescriptionAttribute()]?></td>
+                <td><?=$activity->description?></td>
             </tr>
             <tr>
                 <th>Начало события</th>
-                <td><?= Date::convertFromFormatToString($activity->getAttributes()[$activity->getStartDateAttribute()])?></td>
+                <td><?= Date::convertFromFormatToString($activity->startDate)?></td>
             </tr>
-            <?php if($activity->getAttributes()[$activity->getEndDateAttribute()]):?>
+            <?php if($activity->endDate):?>
                 <tr>
                     <th>Окончание события</th>
-                    <td><?=Date::convertFromFormatToString($activity->getAttributes()[$activity->getEndDateAttribute()])?></td>
+                    <td><?=Date::convertFromFormatToString($activity->endDate)?></td>
                 </tr>
             <?php endif;?>
             <tr>
                 <th>Событие занимает весь день</th>
-                <td><?=$activity->getAttributes()[$activity->getIsBlockingAttribute()] ? 'Да' : 'Нет'?></td>
+                <td><?=$activity->isBlocking ? 'Да' : 'Нет'?></td>
             </tr>
         </table>
     </div>

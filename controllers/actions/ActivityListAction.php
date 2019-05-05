@@ -31,7 +31,7 @@ class ActivityListAction extends Action
                 'arColumns' => $activityComponent->getColumns(),
                 'arRows' => $activityComponent->getAllActivities(),
                 'arLinkFields' => array(
-                    $model->getTitleAttribute(),
+                    'title',
                     'id',
                 ),
                 'linkTemplate' => '@web/activity/detail',

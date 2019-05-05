@@ -11,6 +11,7 @@
  * @var $email string
  *
  */
+
 use yii\helpers\Html; ?>
 <div class="row">
     <div class="col-md-6">

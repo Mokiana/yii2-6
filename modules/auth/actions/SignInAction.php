@@ -3,12 +3,17 @@
 namespace app\modules\auth\actions;
 
 
+use app\modules\auth\components\AuthComponent;
 use yii\base\Action;
 use yii\web\Application;
-use yii\web\Response;
 
 class SignInAction extends Action
 {
+    /**
+     * @var $authComponent AuthComponent
+     */
+    public $authComponent;
+
     /**
      * @var $app Application
      *
@@ -17,10 +22,23 @@ class SignInAction extends Action
 
     public function run()
     {
-        $this->app->response->format = Response::FORMAT_JSON;
-        return array('data' => 'asda', 'sd', 1, 22);
+        $modelUser = $this->authComponent->getModel();
+        $error = null;
+        if($this->app->request->isPost) {
+            $modelUser->load($this->app->request->post());
+            if($this->authComponent->authUser($modelUser)) {
+                return $this->controller->redirect('/activity/create');
+            }
+            $error = 'Ошибка! Пароль не верен!';
+        }
 
-        return $this->controller->render('index');
+        return $this->controller->render(
+            'index',
+            array(
+                'model' => $modelUser,
+                'error' => $error
+            )
+        );
     }
 
 }

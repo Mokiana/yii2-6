@@ -3,14 +3,14 @@
 namespace app\modules\auth\actions;
 
 
-use app\modules\auth\components\CreateUserComponent;
+use app\modules\auth\components\AuthComponent;
 use yii\base\Action;
 use yii\web\Application;
 
 class SignUpAction extends Action
 {
     /**
-     * @var $authComponent CreateUserComponent
+     * @var $authComponent AuthComponent
      */
     public $authComponent;
     /**

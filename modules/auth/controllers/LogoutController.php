@@ -2,12 +2,9 @@
 
 namespace app\modules\auth\controllers;
 
-use app\modules\auth\actions\SignUpAction;
+use app\modules\auth\actions\LogoutAction;
 
-/**
- * Default controller for the `auth` module
- */
-class SignUpController extends AbstractAuthController
+class LogoutController extends AbstractAuthController
 {
     /**
      * Renders the index view for the module
@@ -18,15 +15,14 @@ class SignUpController extends AbstractAuthController
     {
         return array(
             'index' => array(
-                'class' => SignUpAction::class,
-                'authComponent' => $this->getAuthComponent(),
-                'app' => \Yii::$app
+                'class' => LogoutAction::class,
+                'app' => \Yii::$app,
             ),
         );
     }
 
     public function getIsSignIn(): bool
     {
-        return false;
+        return true;
     }
 }
