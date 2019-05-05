@@ -18,6 +18,16 @@ class Users extends UsersBase
 {
     public $password;
 
+    public function attributeLabels()
+    {
+        return array(
+            'id' => 'Id',
+            'name' => 'Имя',
+            'email' => 'Email',
+            'password' => 'Пароль',
+        );
+    }
+
     public function rules()
     {
 

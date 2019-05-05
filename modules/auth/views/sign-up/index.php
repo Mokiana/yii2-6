@@ -9,7 +9,7 @@
         <?=$form->field($model, 'name')?>
         <?=$form->field($model, 'email')?>
         <?=$form->field($model, 'password');?>
-        <button class="btn btn-primary" type="submit">Sign Up</button>
+        <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
         <?php $form::end();?>
     </div>
 </div>

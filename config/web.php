@@ -22,6 +22,9 @@ $config = [
             'activity_class' => \app\models\Activity::class,
             'storage_class' => \app\helpers\ActivityStorage::class
         ),
+        'authManager' => array(
+            'class' => '\yii\rbac\DbManager'
+        ),
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'YXaOteyGEe_VNMZ6o_3ii2J12ON1qBLy',
@@ -64,6 +67,9 @@ $config = [
     'modules' => [
         'auth' => [
             'class' => app\modules\auth\AuthModule::class,
+        ],
+        'rbac' => [
+            'class' => \app\modules\rbac\RbacModule::class,
         ],
     ],
     'params' => $params,

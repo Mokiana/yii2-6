@@ -80,6 +80,16 @@ class UsersSignIn extends UsersBase implements IdentityInterface
         return $authKey === $this->auth_key;
     }
 
+    public function attributeLabels()
+    {
+        return array(
+            'id' => 'Id',
+            'name' => 'Имя',
+            'email' => 'Email',
+            'password' => 'Пароль',
+        );
+    }
+
     public function rules()
     {
 
