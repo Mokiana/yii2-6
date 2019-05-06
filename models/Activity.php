@@ -5,11 +5,22 @@ namespace app\models;
 
 use app\base\models\interfaces\StartFinishModelInterface;
 use app\base\validators\AfterDateValidator;
+use app\behaviors\DateCreatedBehavior;
+use app\behaviors\LoggerBehavior;
 use yii\base\Model;
 
 class Activity extends ActivityBase implements StartFinishModelInterface
 {
     public $uploadedFile;
+
+    public function behaviors()
+    {
+        return [
+            ['class'=>DateCreatedBehavior::class,'date_created_attribute' => 'date_created'],
+            LoggerBehavior::class
+        ];
+    }
+
 
 
     public function getStartDate()

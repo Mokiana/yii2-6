@@ -52,6 +52,7 @@ class ActivityCrudController extends Controller
      */
     public function actionView($id)
     {
+        Yii::$app->logIt();
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);

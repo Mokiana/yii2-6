@@ -4,11 +4,13 @@ namespace app\components;
 
 
 use app\base\components\FileComponent;
+use app\behaviors\LoggerBehavior;
 use app\helpers\Date;
 use app\models\Activity;
 use app\models\ActivityFiles;
 use app\models\ActivitySearch;
 use app\modules\rbac\components\RbacComponent;
+use function foo\func;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\web\HttpException;
@@ -24,6 +26,15 @@ class ActivityComponent extends Component
 
     public $errors = array();
 
+    const EVENT_CREATED_ACTIVITY='created_activity';
+
+    public function behaviors()
+    {
+        return [
+            LoggerBehavior::class
+        ];
+    }
+
     public function init()
     {
         parent::init();
@@ -31,6 +42,7 @@ class ActivityComponent extends Component
         if(empty($this->activity_class)) {
             throw new Exception('Нужно передать activity_class');
         }
+
     }
 
     /**
@@ -55,6 +67,7 @@ class ActivityComponent extends Component
 
             $model->save();
 
+
             foreach ($model->uploadedFile as $file) {
                 $fileModel = \Yii::createObject(
                     array(
@@ -68,6 +81,8 @@ class ActivityComponent extends Component
                     $fileModel->save();
                 }
             }
+
+            $this->trigger(self::EVENT_CREATED_ACTIVITY);
 
             return true;
         }

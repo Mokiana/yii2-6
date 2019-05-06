@@ -34,6 +34,12 @@
         [
             'attribute' => 'user.email',
             'label' => 'Пользователь'
+        ],
+        [
+            'attribute' => 'date_created',
+            'value'=>function($model){
+                return $model->getDateAt();
+            }
         ]
     ]
 ]);?>

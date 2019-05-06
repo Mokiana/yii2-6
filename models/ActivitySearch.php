@@ -12,7 +12,6 @@ class ActivitySearch extends Activity
     public function search($params){
         $model=new Activity();
 
-//        print_r($model);exit;
         $query=$model::find();
         $query->with('user');
 
@@ -29,6 +28,9 @@ class ActivitySearch extends Activity
                 ]
             ]
         );
+
+
+//        $provider->get
 
         $query->andFilterWhere(['like','title',$this->title]);
 

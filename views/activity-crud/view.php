@@ -9,6 +9,11 @@ use yii\widgets\DetailView;
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Activities'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$model->attachBehavior('ttt',['class'=>\app\behaviors\DateCreatedBehavior::class,
+    'date_created_attribute' => 'date_created']);
+
+//$model->detachBehavior('ttt');
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="activity-view">
@@ -38,7 +43,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
             'isBlocking',
             'needNotification',
-            'date_created',
+            [
+                    'attribute'=>'date_created',
+                    'value'=>function($model){
+        return $model->getDateAt();
+                    }
+            ],
         ],
     ]) ?>
 

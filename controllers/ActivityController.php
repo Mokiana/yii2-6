@@ -17,43 +17,43 @@ class ActivityController extends BaseController
 {
 
 
-//    public function actions()
-//    {
-//        $rbac = \Yii::createObject(array(
-//            'class' => RbacComponent::class,
-//            'app' => \Yii::$app,
-//            'authManager' => \Yii::$app->authManager
-//        ));
-//
-//        return array(
-//            'create' => array(
+    public function actions()
+    {
+        $rbac = \Yii::createObject(array(
+            'class' => RbacComponent::class,
+            'app' => \Yii::$app,
+            'authManager' => \Yii::$app->authManager
+        ));
+
+        return array(
+            'create' => array(
+                'class' => ActivityCreateAction::class,
+                'name' => 'activity',
+                'fileComponent' => ActivityFileComponent::class,
+                'rbac' => $rbac
+            ),
+//            'index' => array(
 //                'class' => ActivityCreateAction::class,
 //                'name' => 'activity',
+//                'rbac' => $rbac,
 //                'fileComponent' => ActivityFileComponent::class,
-//                'rbac' => $rbac
 //            ),
-////            'index' => array(
-////                'class' => ActivityCreateAction::class,
-////                'name' => 'activity',
-////                'rbac' => $rbac,
-////                'fileComponent' => ActivityFileComponent::class,
-////            ),
-//            'list' => array(
-//                'class' => ActivityListAction::class,
-//                'name' => 'activity'
-//            ),
-//            'detail' => array(
-//                'class' => ActivityDetailAction::class,
-//                'name' => 'activity',
-//                'rbac' => $rbac,
-//            ),
-//            'edit' => array(
-//                'class' => ActivityEditAction::class,
-//                'name' => 'activity',
-//                'rbac' => $rbac,
-//            ),
-//        );
-//    }
+            'list' => array(
+                'class' => ActivityListAction::class,
+                'name' => 'activity'
+            ),
+            'detail' => array(
+                'class' => ActivityDetailAction::class,
+                'name' => 'activity',
+                'rbac' => $rbac,
+            ),
+            'edit' => array(
+                'class' => ActivityEditAction::class,
+                'name' => 'activity',
+                'rbac' => $rbac,
+            ),
+        );
+    }
 
     public function actionIndex(){
 
