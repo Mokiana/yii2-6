@@ -7,8 +7,11 @@ use app\base\components\FileComponent;
 use app\helpers\Date;
 use app\models\Activity;
 use app\models\ActivityFiles;
+use app\modules\rbac\components\RbacComponent;
 use yii\base\Component;
 use yii\base\Exception;
+use yii\web\HttpException;
+
 
 /**
  * Class ActivityComponent
@@ -17,7 +20,6 @@ use yii\base\Exception;
 class ActivityComponent extends Component
 {
     public $activity_class;
-    public $storage_class;
 
     public $errors = array();
 
@@ -88,8 +90,33 @@ class ActivityComponent extends Component
     public function getAllActivities()
     {
         $model = $this->getModel();
-        $arData = $model::find()->asArray()->all();
 
+        $filter = null;
+
+        /**
+         * @var $rbacComponent RbacComponent
+         */
+        $rbacComponent = \Yii::createObject(array(
+            'class' => RbacComponent::class,
+            'app' => \Yii::$app
+        ));
+
+
+        $viewAll = $rbacComponent->canViewAllActivities();
+        if(!$viewAll) {
+            $viewMy = $rbacComponent->canViewOwnActivities(\Yii::$app->user->getId());
+        }
+
+
+        $model = $model::find();
+        if(!$viewAll && $viewMy) {
+            $model = $model->where(array('user_id' => \Yii::$app->user->getId()));
+        } elseif(!$viewAll) {
+            throw new HttpException(403, 'You have no permissions to read the list');
+        }
+
+
+        $arData = $model->asArray()->all();
         $isBlockingCode = 'isBlocking';
         $startDateCode = 'startDate';
         $endDateCode = 'endDate';

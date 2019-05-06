@@ -26,7 +26,7 @@ class RbacComponent extends Component
     {
         $authManager = $this->getAuthManager();
         //Очистка всх правил, ролей, разрешений
-        $authManager->removeAll();
+        $this->cleanRbac();
 
         //Добавление ролей
         $admin = $authManager->createRole('admin');
@@ -36,35 +36,41 @@ class RbacComponent extends Component
 
 
         $createActivity = $authManager->createPermission('createActivity');
-        $createActivity->description='Создание событий';
+        $createActivity->description = 'Создание событий';
 
         $viewAllActivity = $authManager->createPermission('viewAllActivity');
-        $viewAllActivity ->description='Просмотр любых событий';
+        $viewAllActivity->description = 'Просмотр любых событий';
 
         $viewOwnActivity = $authManager->createPermission('viewOwnActivity');
-        $viewOwnActivity->description='Просмотр своих событий';
+        $viewOwnActivity->description = 'Просмотр своих событий';
 
         $viewOwnerRule = new ViewOwnActivity();
         $authManager->add($viewOwnerRule);
-        $viewOwnActivity->ruleName=$viewOwnerRule->name;
+        $viewOwnActivity->ruleName = $viewOwnerRule->name;
 
         $authManager->add($createActivity);
-        $authManager->add($viewAllActivity );
+        $authManager->add($viewAllActivity);
         $authManager->add($viewOwnActivity);
 
 
+        $authManager->addChild($user, $createActivity);
+        $authManager->addChild($user, $viewOwnActivity);
+        $authManager->addChild($admin, $user);
+        $authManager->addChild($admin, $viewAllActivity);
 
-        $authManager->addChild($user,$createActivity);
-        $authManager->addChild($user,$viewOwnActivity);
-        $authManager->addChild($admin,$user);
-        $authManager->addChild($admin,$viewAllActivity);
+        $authManager->assign($user, 2);
+        $authManager->assign($admin, 1);
+    }
 
-        $authManager->assign($user,7);
-        $authManager->assign($admin,1);
+    public function cleanRbac()
+    {
+        $authManager = $this->getAuthManager();
+        $authManager->removeAll();
     }
 
 
-    public function canCreateActivity(){
+    public function canCreateActivity()
+    {
         return $this->app->user->can('createActivity');
     }
 
@@ -73,14 +79,22 @@ class RbacComponent extends Component
      * @param int $ownerId
      * @return bool
      */
-    public function canViewActivity(int $ownerId){
-        if($this->app->user->can('viewAllActivity')){
+    public function canViewActivity(int $ownerId)
+    {
+        if ($this->canViewAllActivities()) {
             return true;
         }
 
-        if($this->app->user->can('viewOwnActivity', array('ownerId' => $ownerId))){
-            return true;
-        }
-        return false;
+        return $this->canViewOwnActivities($ownerId);
+    }
+
+    public function canViewAllActivities()
+    {
+        return $this->app->user->can('viewAllActivity');
+    }
+
+    public function canViewOwnActivities($ownerId)
+    {
+        return $this->app->user->can('viewOwnActivity', array('ownerId' => $ownerId));
     }
 }

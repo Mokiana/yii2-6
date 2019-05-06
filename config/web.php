@@ -20,7 +20,6 @@ $config = [
         'activity' => array(
             'class' => \app\components\ActivityComponent::class,
             'activity_class' => \app\models\Activity::class,
-            'storage_class' => \app\helpers\ActivityStorage::class
         ),
         'authManager' => array(
             'class' => '\yii\rbac\DbManager'

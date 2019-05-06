@@ -12,7 +12,6 @@ class SignInController extends AbstractAuthController
     /**
      * Renders the index view for the module
      * @return array
-     * @throws \yii\base\InvalidConfigException
      */
     public function actions()
     {

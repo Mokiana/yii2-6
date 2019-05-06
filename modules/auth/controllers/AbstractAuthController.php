@@ -30,7 +30,8 @@ abstract class AbstractAuthController extends BaseController
             array(
                 'class' => AuthComponent::class,
                 'model' => $this->getModel(),
-                'app' => \Yii::$app
+                'app' => \Yii::$app,
+                'authManager' => \Yii::$app->authManager
             )
         );
     }

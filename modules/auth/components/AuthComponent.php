@@ -25,6 +25,11 @@ class AuthComponent extends Component
      */
     public $app;
 
+    /**
+     * @var $authManager \yii\rbac\ManagerInterface
+     */
+    public $authManager;
+
 
     /**
      * @return Users|UsersSignIn
@@ -38,11 +43,13 @@ class AuthComponent extends Component
     /**
      * @param $model Users
      * @return bool
+     * @throws \Exception
      */
     public function createUser(&$model):bool{
         $model->password_hash=$this->hashPassword($model->password);
         $model->auth_key=$this->generateAuthKey();
         if($model->save()){
+            $this->authManager->assign($this->authManager->getRole('user'), $model->id);
             return true;
         }
         return false;
