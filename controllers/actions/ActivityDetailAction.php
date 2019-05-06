@@ -38,6 +38,7 @@ class ActivityDetailAction extends Action
         return $this->controller->render(
             'detail',
             array(
+                'id' => $arActivity['id'],
                 'title' => $arActivity['title'],
                 'dateFrom' => $arActivity['dateFrom'],
                 'dateTo' => $arActivity['dateTo'],

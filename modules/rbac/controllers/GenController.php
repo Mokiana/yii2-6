@@ -12,7 +12,8 @@ class GenController extends BaseController
     {
         $rbacComponent = \Yii::createObject(array(
             'class' => RbacComponent::class,
-            'app' => \Yii::$app
+            'app' => \Yii::$app,
+            'authManager' => \Yii::$app->authManager
         ));
 
         $rbacComponent->genRbac();

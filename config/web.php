@@ -60,6 +60,7 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 'activity/detail/<id:\d+>' => 'activity/detail',
+                'activity/edit/<id:\d+>' => 'activity/edit',
             ],
         ],
     ],

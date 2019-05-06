@@ -15,11 +15,16 @@ class RbacComponent extends Component
     public $app;
 
     /**
+     * @var $authManager \yii\rbac\ManagerInterface
+     */
+    public $authManager;
+
+    /**
      * @return \yii\rbac\ManagerInterface
      */
     public function getAuthManager()
     {
-        return $this->app->authManager;
+        return $this->authManager;
     }
 
     public function genRbac()
@@ -44,19 +49,31 @@ class RbacComponent extends Component
         $viewOwnActivity = $authManager->createPermission('viewOwnActivity');
         $viewOwnActivity->description = 'Просмотр своих событий';
 
+        $editAllActivities = $authManager->createPermission('editAllActivities');
+        $editAllActivities->description = 'Редактирование событий';
+
+        $editOwnActivities = $authManager->createPermission('editOnwActivities');
+        $editOwnActivities->description = 'Редактирование своих событий';
+
         $viewOwnerRule = new ViewOwnActivity();
         $authManager->add($viewOwnerRule);
         $viewOwnActivity->ruleName = $viewOwnerRule->name;
+        $editOwnActivities->ruleName = $viewOwnerRule->name;
 
         $authManager->add($createActivity);
         $authManager->add($viewAllActivity);
         $authManager->add($viewOwnActivity);
+        $authManager->add($editAllActivities);
+        $authManager->add($editOwnActivities);
 
 
         $authManager->addChild($user, $createActivity);
         $authManager->addChild($user, $viewOwnActivity);
+        $authManager->addChild($user, $editOwnActivities);
+
         $authManager->addChild($admin, $user);
         $authManager->addChild($admin, $viewAllActivity);
+        $authManager->addChild($admin, $editAllActivities);
 
         $authManager->assign($user, 2);
         $authManager->assign($admin, 1);
@@ -96,5 +113,28 @@ class RbacComponent extends Component
     public function canViewOwnActivities($ownerId)
     {
         return $this->app->user->can('viewOwnActivity', array('ownerId' => $ownerId));
+    }
+
+    /**
+     * @param int $ownerId
+     * @return bool
+     */
+    public function canEditActivity(int $ownerId)
+    {
+        if ($this->canEditAllActivities()) {
+            return true;
+        }
+
+        return $this->canEditOwnActivities($ownerId);
+    }
+
+    public function canEditAllActivities()
+    {
+        return $this->app->user->can('editAllActivities');
+    }
+
+    public function canEditOwnActivities(int $ownerId)
+    {
+        return $this->app->user->can('editOnwActivities', array('ownerId' => $ownerId));
     }
 }

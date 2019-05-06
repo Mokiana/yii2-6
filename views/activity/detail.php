@@ -9,13 +9,14 @@
  * @var $isBlocking string
  * @var $useNotifications string
  * @var $email string
+ * @var $id int
  *
  */
 
 use yii\helpers\Html; ?>
 <div class="row">
     <div class="col-md-6">
-        <h3><?=$title?></h3>
+        <span><h3><?=$title?></h3> (<a href="/activity/edit/<?=$id?>">Редактировать</a>)</span>
         <ul>
             <li><b>Дата начала:</b> <?=$dateFrom?></li>
             <?php if($dateTo):?>
@@ -46,3 +47,4 @@ use yii\helpers\Html; ?>
     </div>
 </div>
 <?php endif;?>
+

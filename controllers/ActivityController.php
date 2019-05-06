@@ -6,6 +6,7 @@ use app\base\controllers\BaseController;
 use app\components\ActivityFileComponent;
 use app\controllers\actions\ActivityCreateAction;
 use app\controllers\actions\ActivityDetailAction;
+use app\controllers\actions\ActivityEditAction;
 use app\controllers\actions\ActivityListAction;
 use app\modules\rbac\components\RbacComponent;
 
@@ -16,7 +17,8 @@ class ActivityController extends BaseController
     {
         $rbac = \Yii::createObject(array(
             'class' => RbacComponent::class,
-            'app' => \Yii::$app
+            'app' => \Yii::$app,
+            'authManager' => \Yii::$app->authManager
         ));
 
         return array(
@@ -38,6 +40,11 @@ class ActivityController extends BaseController
             ),
             'detail' => array(
                 'class' => ActivityDetailAction::class,
+                'name' => 'activity',
+                'rbac' => $rbac,
+            ),
+            'edit' => array(
+                'class' => ActivityEditAction::class,
                 'name' => 'activity',
                 'rbac' => $rbac,
             ),

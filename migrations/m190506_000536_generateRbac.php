@@ -14,7 +14,8 @@ class m190506_000536_generateRbac extends Migration
     {
         $componentRbac = Yii::createObject(array(
             'class' => \app\modules\rbac\components\RbacComponent::class,
-            'app' => Yii::$app
+            'app' => Yii::$app,
+            'authManager' => Yii::$app->authManager
         ));
         $componentRbac->genRbac();
     }
@@ -26,11 +27,10 @@ class m190506_000536_generateRbac extends Migration
     {
         $componentRbac = Yii::createObject(array(
             'class' => \app\modules\rbac\components\RbacComponent::class,
-            'app' => Yii::$app
+            'app' => Yii::$app,
+            'authManager' => Yii::$app->authManager
         ));
         $componentRbac->cleanRbac();
-
-        return false;
     }
 
     /*

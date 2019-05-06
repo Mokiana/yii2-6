@@ -98,7 +98,8 @@ class ActivityComponent extends Component
          */
         $rbacComponent = \Yii::createObject(array(
             'class' => RbacComponent::class,
-            'app' => \Yii::$app
+            'app' => \Yii::$app,
+            'authManager' => \Yii::$app->authManager
         ));
 
 
