@@ -36,7 +36,7 @@
                         'enableClientValidation' => false,
                         'enableAjaxValidation' => true
                     )
-                )->input('date')?>
+                )->widget(\yii\widgets\MaskedInput::class,['mask' => '9999-99-99'])?>
             </div>
             <div class="col-md-6">
                 <?=$form->field(

@@ -40,7 +40,7 @@ class ActivityDetailAction extends Action
             array(
                 'id' => $arActivity['id'],
                 'title' => $arActivity['title'],
-                'dateFrom' => $arActivity['dateFrom'],
+                'dateFrom' => $arActivity['endDate'],
                 'dateTo' => $arActivity['dateTo'],
                 'pictures' => $arActivity['uploadedFile'],
                 'description' => $arActivity['description'],

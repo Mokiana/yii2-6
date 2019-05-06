@@ -107,4 +107,12 @@ class Activity extends ActivityBase implements StartFinishModelInterface
             )
         );
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(Users::class, ['id' => 'user_id']);
+    }
 }

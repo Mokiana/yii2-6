@@ -7,6 +7,7 @@ use app\base\components\FileComponent;
 use app\helpers\Date;
 use app\models\Activity;
 use app\models\ActivityFiles;
+use app\models\ActivitySearch;
 use app\modules\rbac\components\RbacComponent;
 use yii\base\Component;
 use yii\base\Exception;
@@ -148,4 +149,5 @@ class ActivityComponent extends Component
 
         return $arActivity;
     }
+
 }
