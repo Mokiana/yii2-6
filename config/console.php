@@ -1,7 +1,12 @@
 <?php
 
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
+//$db = require __DIR__ . '/db.php';
+
+if(file_exists(__DIR__ . '/db_my.php'))
+    $db = require __DIR__ . '/db_my.php';
+else
+    $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic-console',

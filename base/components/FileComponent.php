@@ -6,7 +6,6 @@ use yii\base\Component;
 use yii\base\Model;
 use yii\helpers\FileHelper;
 use yii\helpers\Html;
-use yii\helpers\StringHelper;
 use yii\web\UploadedFile;
 
 class FileComponent extends Component
@@ -69,7 +68,7 @@ class FileComponent extends Component
                  */
                 $res = $this->saveUploadedFile($file, $fileName);
                 if($res) {
-                    $arFiles[] = $fileName;
+                    $arFiles[] = str_replace(\Yii::getAlias('@webroot'), '', $fileName);
                 } else {
                     $model->addError($attribute, 'Не удалось загрузить файл ' . $file->getBaseName());
                 }
